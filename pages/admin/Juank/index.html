@@ -3,138 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD Genérico - Juank</title>
+    <title>Entorno de Pruebas - Juank</title>
 </head>
 <body>
 
-    <h1>Módulo Administrativo</h1>
-
-    <!-- Control de Sesión Simple -->
-    <div style="border: 1px solid black; padding: 10px; margin-bottom: 20px;">
-        <strong>Estado de Sesión:</strong> <span id="session-status">Verificando...</span>
-        <a href="/pages/login/index.html" id="session-action-btn">Iniciar Sesión</a>
-    </div>
-
-    <!-- Navegación Simple -->
     <div>
-        <button id="tab-members-btn" style="font-weight: bold;">Sección: Miembros</button>
-        <button id="tab-cards-btn">Sección: Tarjetas (Cards)</button>
+        <label for="teamIdInput">ID del Equipo: </label>
+        <input type="number" id="teamIdInput" value="1">
+        <button id="btnCargar">Cargar Etiquetas</button>
     </div>
 
-    <hr />
+    <h3>Resultado de las Etiquetas:</h3>
+    <p id="mensajeEstado">Presiona el botón para consultar...</p>
+    <ul id="listaEtiquetas"></ul>
 
-    <!-- SECCIÓN DE MIEMBROS -->
-    <div id="panel-members">
-        <h2>Gestión de Miembros</h2>
+    <hr>
+
+    <h2> Crear Nueva Etiqueta</h2>
+    <div>
+        <label for="labelNameInput">Nombre: </label>
+        <input type="text" id="labelNameInput" placeholder="Ej: Urgente">
         
-        <div style="background-color: #f0f0f0; padding: 15px; margin-bottom: 20px; border: 1px dashed gray;">
-            <label for="searchMemberTeamId"><strong>Filtrar por ID de Equipo (Team ID):</strong></label>
-            <input type="number" id="searchMemberTeamId" value="1" />
-            <button type="button" id="btn-load-members">Cargar Miembros del Equipo</button>
-        </div>
-
-        <h3>Agregar Miembro al Equipo</h3>
-        <form id="memberForm">
-            <p>
-                <label>ID de Usuario Registrado:</label><br />
-                <input type="number" id="memberUserId" placeholder="Ej. 1, 2, 3" required />
-            </p>
-            <p>
-                <label>Rol en el Equipo:</label><br />
-                <select id="memberRole" required>
-                    <option value="Member">Member</option>
-                    <option value="Owner">Owner</option>
-                    <option value="Viewer">Viewer</option>
-                </select>
-            </p>
-            <button type="submit" id="btn-submit-member">Guardar Miembro</button>
-        </form>
-
-        <h3>Lista de Miembros</h3>
-        <table border="1" cellpadding="5" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-            <thead>
-                <tr style="background-color: #e0e0e0;">
-                    <th>Usuario ID</th>
-                    <th>Nombre</th>
-                    <th>Rol</th>
-                    <th>Email</th>
-                    <th>Equipo ID</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="membersTableBody">
-                <tr>
-                    <td colspan="6" style="text-align: center;">Ingrese un ID de equipo y haga clic en "Cargar Miembros"</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- SECCIÓN DE TARJETAS (CARDS) -->
-    <div id="panel-cards" style="display: none;">
-        <h2>Gestión de Tarjetas (Cards)</h2>
+        <label for="labelColorInput">Color (Hex): </label>
+        <input type="text" id="labelColorInput" placeholder="Ej: #FF5733">
         
-        <div style="background-color: #f0f0f0; padding: 15px; margin-bottom: 20px; border: 1px dashed gray;">
-            <label for="searchTeamId"><strong>Filtrar por ID de Equipo (Team ID):</strong></label>
-            <input type="number" id="searchTeamId" value="1" />
-            <button type="button" id="btn-load-cards">Cargar Tarjetas del Equipo</button>
-        </div>
-
-        <h3 id="card-form-title">Agregar Nueva Tarjeta</h3>
-        <form id="cardForm">
-            <input type="hidden" id="cardId" />
-            <input type="hidden" id="cardEtag" />
-            <p>
-                <label>Título:</label><br />
-                <input type="text" id="cardTitle" placeholder="Ej. Tarea 1" required />
-            </p>
-            <p>
-                <label>Descripción:</label><br />
-                <textarea id="cardDescription" placeholder="Descripción de la tarjeta..." required></textarea>
-            </p>
-            <p>
-                <label>Orden / Prioridad:</label><br />
-                <input type="number" id="cardOrder" value="0" required />
-            </p>
-            <p>
-                <label>ID Columna Tablero (Opcional):</label><br />
-                <input type="number" id="cardColumnId" placeholder="Ej. 1" />
-            </p>
-            <p>
-                <label>ID Tablero (Opcional):</label><br />
-                <input type="number" id="cardBoardId" placeholder="Ej. 1" />
-            </p>
-            <p>
-                <label>ID del Propietario (Opcional):</label><br />
-                <input type="number" id="cardOwnerId" placeholder="Ej. 1" />
-            </p>
-            <button type="submit" id="btn-submit-card">Crear Tarjeta</button>
-            <button type="button" id="btn-cancel-card-edit" style="display: none;">Cancelar Edición</button>
-        </form>
-
-        <h3>Lista de Tarjetas</h3>
-        <table border="1" cellpadding="5" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-            <thead>
-                <tr style="background-color: #e0e0e0;">
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Orden</th>
-                    <th>Columna ID</th>
-                    <th>Tablero ID</th>
-                    <th>Propietario</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="cardsTableBody">
-                <tr>
-                    <td colspan="8" style="text-align: center;">Ingrese un ID de equipo y haga clic en "Cargar Tarjetas"</td>
-                </tr>
-            </tbody>
-        </table>
+        <button id="btnCrear">Crear Etiqueta</button>
     </div>
+    <p id="mensajeCrearEstado">Completa los campos y presiona Crear...</p>
 
-    <!-- Script controlador module -->
-    <script src="./index.js" type="module"></script>
+    <hr>
+
+    <h2>Actualizar Etiqueta Existente</h2>
+    <div>
+        <label for="labelIdPutInput">ID de la Etiqueta a editar: </label>
+        <input type="number" id="labelIdPutInput" placeholder="Ej: 5" style="width: 60px;"><br><br>
+
+        <label for="labelNamePutInput">Nuevo Nombre: </label>
+        <input type="text" id="labelNamePutInput" placeholder="Ej: Terminado">
+        
+        <label for="labelColorPutInput">Nuevo Color (Hex): </label>
+        <input type="text" id="labelColorPutInput" placeholder="Ej: #00FF00">
+        
+        <button id="btnActualizar">Actualizar Etiqueta</button>
+    </div>
+    <p id="mensajePutEstado">Ingresa los IDs, los nuevos datos y presiona Actualizar...</p>
+
+    <hr>
+
+    <h2> Eliminar Etiqueta</h2>
+    <div>
+        <label for="labelIdDeleteInput">ID de la Etiqueta a borrar: </label>
+        <input type="number" id="labelIdDeleteInput" placeholder="Ej: 5" style="width: 60px;">
+        
+        <button id="btnEliminar" style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer;">Eliminar Etiqueta</button>
+    </div>
+    <p id="mensajeDeleteEstado">Ingresa el ID de la etiqueta que deseas remover...</p>
+    
+    <script src="./script.js" type="module"></script>
+
 </body>
 </html>
